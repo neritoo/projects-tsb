@@ -4,11 +4,12 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Vector {
-    private long vector[];
+    private int vector[];
 
    public Vector() throws IOException {
         int contLineas = 0;
         File f = new File("lote01.txt");
+        //File f = new File("pruebalote00.txt");
         FileReader fr = new FileReader(f);
         BufferedReader br = new BufferedReader(fr);
         String linea = br.readLine();
@@ -19,7 +20,7 @@ public class Vector {
                 linea = br.readLine();
 
             }
-            vector = new long [contLineas];
+            vector = new int [contLineas];
         }
         catch (FileNotFoundException exc){
             System.out.println("Amigo no existe ese archivo...");
@@ -27,7 +28,7 @@ public class Vector {
 
     }
     //Por las dudas...
-    public void setComponente(int pos, long num){
+    public void setComponente(int pos, int num){
         if (pos > 0 && pos < vector.length){
             vector[pos] = num;
         }
@@ -40,13 +41,14 @@ public class Vector {
 
     public void fillVector() throws IOException {
         File f = new File("lote01.txt");
+        //File f = new File("pruebalote00.txt");
 
         System.out.println("Leyendo datos");
 
         try (Scanner myScanner = new Scanner(f)){
             while (myScanner.hasNextLong()){
                 for (int i=0 ; i<vector.length ; i++){
-                    vector[i] = myScanner.nextLong();
+                    vector[i] = myScanner.nextInt();
                 }
 
             }
@@ -57,8 +59,7 @@ public class Vector {
         }
 
     }
-    //Ignora, era para probar que cuenta bien las lineas...
-    public int cantLin(){
+    public int vectorLen(){
         return vector.length;
     }
 
@@ -74,38 +75,38 @@ public class Vector {
     //Fix this
     public void mergeSort()
     {
-        long n = vector.length;
-        long temp[] = new long[Math.toIntExact(n)];
+        int n = vector.length;
+        int temp[] = new int[n];
         sort(0, n-1, temp);
         System.out.println("Vector ordenado");
     }
 
-    private void sort(long izq, long der, long temp[])
+    private void sort(int izq, int der, int temp[])
     {
         if(izq < der)
         {
-            long centro = (izq + der) / 2;
+            int centro = (izq + der) / 2;
             sort(izq, centro, temp);
             sort(centro + 1, der, temp);
             merge(izq, centro, der, temp);
         }
     }
 
-    private void merge(long izq, long centro, long der, long temp[])
+    private void merge(int izq, int centro, int der, int temp[])
     {
-        for(long i = izq; i <= der; i++) { temp[Math.toIntExact(i)] = vector[Math.toIntExact(i)]; }
+        for(int i = izq; i <= der; i++) { temp[Math.toIntExact(i)] = vector[i]; }
 
-        long i = izq, j = centro + 1, k = izq;
+        int i = izq, j = centro + 1, k = izq;
         while(i <= centro && j <= der)
         {
-            if(temp[Math.toIntExact(i)] <= temp[Math.toIntExact(j)])
+            if(temp[i] <= temp[j])
             {
-                vector[Math.toIntExact(k)] = temp[Math.toIntExact(i)];
+                vector[k] = temp[i];
                 i++;
             }
             else
             {
-                vector[Math.toIntExact(k)] = temp[Math.toIntExact(j)];
+                vector[k] = temp[j];
                 j++;
             }
             k++;
@@ -113,7 +114,7 @@ public class Vector {
 
         while(i <= centro)
         {
-            vector[Math.toIntExact(k)] = temp[Math.toIntExact(i)];
+            vector[k] = temp[i];
             k++;
             i++;
         }
@@ -122,32 +123,32 @@ public class Vector {
 
     //Método de búsqueda
 
-    public int binarySearch(int x)
+    public boolean binarySearch(int x)
     {
         int n = vector.length;
         int izq = 0, der = n-1;
         while(izq <= der)
         {
             int c = (izq + der)/2;
-            if(x == vector[c]) return c;
+            if(x == vector[c]) return true;
 
             if(x < vector[c]) der = c - 1;
             else izq = c + 1;
         }
-        return -1;
+        return false;
     }
 
     //Métodos de negocio
 
-    //buscar el primer número primo en el arreglo
+    // buscar el primer número primo en el arreglo
     // calcular la mediana del arreglo
     // calcular el promedio del arreglo
     // buscar un grupo de ocho números en el arreglo
     // buscar el mayor de los números contenidos en el arreglo
 
-    public long getPrimerPrimo() {
+    public int getPrimerPrimo() {
         int res;
-        long primo=0;
+        int primo=0;
         for (int i=0 ; i < vector.length ; i++){
             res = 0;
             for (int j= 1; j <= vector[i] ; j++){
@@ -165,6 +166,42 @@ public class Vector {
 
         }
         return primo;
+    }
 
+    public double getMediana(){
+       double mediana;
+       int i = vectorLen()/2;
+
+       mediana = (double)(vector[i-1]+vector[i])/2;
+
+       return mediana;
+    }
+
+    public double getPromedio(){
+       long acum=0;
+       long n = vectorLen();
+       double prom;
+
+       for (int i=0; i < vectorLen() ; i++){
+           acum += vector[i];
+       }
+
+       prom = (double)acum / n;
+       return prom;
+    }
+
+    public int getMayor(){
+       int mayor=0;
+
+       for (int i=0; i < vector.length ;i++){
+            mayor = vector[i];
+            for(int j=0;j<vectorLen();j++){
+                if(vector[j] > mayor)
+                    mayor = vector[j];
+                    break;
+            }
+       }
+
+       return mayor;
     }
 }
