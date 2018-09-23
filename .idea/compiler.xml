@@ -9,8 +9,5 @@
         <module name="TSB-SimpleList03" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="TSB-SimpleList03" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
